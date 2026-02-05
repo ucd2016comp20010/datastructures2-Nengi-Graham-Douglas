@@ -23,6 +23,8 @@ public class SinglyLinkedList<E> implements List<E> {
          */
         public Node(E e, Node<E> n) {
             // TODO
+            element = e;
+            next = n;
         }
 
         // Accessor methods
@@ -33,7 +35,7 @@ public class SinglyLinkedList<E> implements List<E> {
          * @return the element stored at the node
          */
         public E getElement() {
-            return null;
+            return element;
         }
 
         /**
@@ -43,7 +45,7 @@ public class SinglyLinkedList<E> implements List<E> {
          */
         public Node<E> getNext() {
             // TODO
-            return null;
+            return next;
         }
 
         // Modifier methods
@@ -55,6 +57,7 @@ public class SinglyLinkedList<E> implements List<E> {
          */
         public void setNext(Node<E> n) {
             // TODO
+            next = n;
         }
     } //----------- end of nested Node class -----------
 
@@ -75,35 +78,81 @@ public class SinglyLinkedList<E> implements List<E> {
     //@Override
     public int size() {
         // TODO
-        return 0;
+        //return how many elements are in the list
+        return size;
     }
 
     //@Override
+    //check if the list has zero elements
     public boolean isEmpty() {
         // TODO
-        return false;
+        return size == 0;
     }
 
     @Override
+    //returns the element stored at the index position in the list
     public E get(int position) {
-        // TODO
-        return null;
+        // TODO: start at head, move forward position times, return with the data in that node
+        Node<E> current = head;
+
+        if(position < 0 || position >=size){
+            throw new IndexOutOfBoundsException();
+        }
+
+        for (int i = 0; i < position; i++){
+            current = current.getNext();
+        }
+        return current.getElement();
     }
 
     @Override
     public void add(int position, E e) {
-        // TODO
+        // TODO:    insert a new element in front of the list
+        if (position < 0 || position > size) {
+            throw new IndexOutOfBoundsException("Invalid index: " + position);
+        }
+
+        if (position == 0) {
+            addFirst(e);
+            return;
+        }
+
+        Node<E> prev = head;
+        for (int i = 0; i < position - 1; i++) {
+            prev = prev.getNext();
+        }
+
+        Node<E> newest = new Node<>(e, prev.getNext());
+        prev.setNext(newest);
+
+        size++;
     }
 
 
     @Override
     public void addFirst(E e) {
         // TODO
+        //new node becomes the head
+        head = new Node<E>(e, head); //create and link a new node
+        size++;
     }
 
     @Override
     public void addLast(E e) {
         // TODO
+        Node<E> newest = new Node<E>(e, null); //node will eventually be the tail
+        Node<E> last = head;
+        if(last == null) { //if the list is empty
+            head = newest; //the new node becomes the head
+        }
+        //otherwise walk until current.next == null, and attach new node ther
+        else {
+            while (last.getNext() != null) {
+                last = last.getNext();
+            }
+            last.setNext(newest);
+        }
+        size++;
     }
 
     @Override
