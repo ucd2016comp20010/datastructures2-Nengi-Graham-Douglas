@@ -164,13 +164,55 @@ public class SinglyLinkedList<E> implements List<E> {
     @Override
     public E removeFirst() {
         // TODO
-        return null;
+        //edge case: if the list is empty
+        if(isEmpty()){
+            return null;
+        }
+        //save old head's element
+        E answer = head.getElement();
+
+        //move head to head.next
+        head = head.getNext();
+
+        //decrease size
+        size--;
+
+        //return saved element
+
+        return answer;
     }
 
     @Override
+    //remove last = remove the last node in the list and return its element
     public E removeLast() {
         // TODO
-        return null;
+        //handle edge cases
+        if(isEmpty()){
+            return null;
+        }
+
+        //only node
+        if(size == 1){
+            E answer = head.getElement();
+            head = null;
+            size = 0;
+            return answer;
+        }
+        //traverse until current.next.next == null;
+        Node<E> current = head;
+        while (current.getNext().getNext() != null){
+            current = current.getNext();
+        }
+        //save the last element
+        E answer = current .getNext().getElement();
+
+        //set current.nect = null
+        current.setNext(null);
+
+        //decrease size
+        size--;
+
+        return answer;
     }
 
     //@Override
@@ -218,10 +260,10 @@ public class SinglyLinkedList<E> implements List<E> {
         ll.addFirst(3);
         ll.addFirst(4);
         ll.addLast(-1);
-        //ll.removeLast();
-        //ll.removeFirst();
-        //System.out.println("I accept your apology");
-        //ll.add(3, 2);
+        ll.removeLast();
+        ll.removeFirst();
+        System.out.println("I accept your apology");
+        ll.add(3, 2);
         System.out.println(ll);
         ll.remove(5);
         System.out.println(ll);
