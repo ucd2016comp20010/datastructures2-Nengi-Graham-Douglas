@@ -7,9 +7,9 @@ import java.util.Iterator;
 public class DoublyLinkedList<E> implements List<E> {
 
     private static class Node<E> {
-        private final E data;
+        private E data;
         private Node<E> next;
-        private final Node<E> prev;
+        private Node<E> prev;
 
         public Node(E e, Node<E> p, Node<E> n) {
             data = e;
@@ -29,50 +29,95 @@ public class DoublyLinkedList<E> implements List<E> {
             return prev;
         }
 
+        public void setNext (Node <E> n) {
+            next = n;
+        }
+        public void setPrev (Node <E> p) {
+            prev = p;
+        }
+
     }
 
-    private final Node<E> head;
-    private final Node<E> tail;
-    private final int size = 0;
+    private Node<E> head;
+    private Node<E> tail;
+    private int size = 0;
 
     public DoublyLinkedList() {
         head = new Node<E>(null, null, null);
         tail = new Node<E>(null, head, null);
         head.next = tail;
+        tail.prev = head;
     }
 
     private void addBetween(E e, Node<E> pred, Node<E> succ) {
-        // TODO
+        // TODO - insert a new node between 2 existing nodes
+        Node<E> newest = new Node<>(e, pred, succ);
+        pred.setNext(newest);
+        succ.setPrev(newest);
+        size++;
     }
 
     @Override
     public int size() {
         // TODO
-        return 0;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
         // TODO
-        return false;
+        return size == 0;
     }
 
     @Override
     public E get(int i) {
         // TODO
-        return null;
+        //return element at index i
+        if(i < 0 || i >= size){
+            throw new IndexOutOfBoundsException("Invalid index");
+        }
+        Node<E> curr = head.getNext();
+        for(int k = 0; k < 1; k++){
+            curr = curr.getNext();
+        }
+        return curr.getData();
     }
 
     @Override
     public void add(int i, E e) {
         // TODO
-    }
+            if (i < 0 || i > size) {
+                throw new IndexOutOfBoundsException("Invalid index: " + i);
+            }
+
+            if (i == 0) { addFirst(e); return; }
+            if (i == size) { addLast(e); return; }
+
+            Node<E> succ = head.getNext();
+            for (int k = 0; k < i; k++) {
+                succ = succ.getNext();
+            }
+            Node<E> pred = succ.getPrev();
+            addBetween(e, pred, succ);
+        }
+
 
     @Override
     public E remove(int i) {
         // TODO
-        return null;
-    }
+        if (i < 0 || i >= size) {
+            throw new IndexOutOfBoundsException("Invalid index: " + i);
+        }
+
+        if (i == 0) return removeFirst();
+        if (i == size - 1) return removeLast();
+
+        Node<E> curr = head.getNext();
+        for (int k = 0; k < i; k++) {
+            curr = curr.getNext();
+        }
+        return remove(curr);
+}
 
     private class DoublyLinkedListIterator<E> implements Iterator<E> {
         Node<E> curr = (Node<E>) head.next;
@@ -97,7 +142,14 @@ public class DoublyLinkedList<E> implements List<E> {
 
     private E remove(Node<E> n) {
         // TODO
-        return null;
+        Node <E> pred = n.getPrev();
+        Node <E> succ = n.getNext();
+
+        pred.setNext(succ);
+        pred.setPrev(pred);
+
+        size--;
+        return n.getData();
     }
 
     public E first() {
@@ -109,29 +161,35 @@ public class DoublyLinkedList<E> implements List<E> {
 
     public E last() {
         // TODO
+        if (isEmpty())
         return null;
+        return tail.getPrev().getData();
     }
 
     @Override
     public E removeFirst() {
         // TODO
-        return null;
+        if(isEmpty()) return null;
+        return remove(head.getNext());
     }
 
     @Override
     public E removeLast() {
         // TODO
-        return null;
+        if(isEmpty()) return null;
+        return remove(tail.getPrev());
     }
 
     @Override
     public void addLast(E e) {
         // TODO
+        addBetween(e, tail.getPrev(), tail);
     }
 
     @Override
     public void addFirst(E e) {
         // TODO
+        addBetween(e, head, head.getNext());
     }
 
     public String toString() {

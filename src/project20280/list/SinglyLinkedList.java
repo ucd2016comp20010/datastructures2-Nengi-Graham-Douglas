@@ -157,8 +157,39 @@ public class SinglyLinkedList<E> implements List<E> {
 
     @Override
     public E remove(int position) {
-        // TODO
-        return null;
+        //removeposition: remove the node at index position and return its element
+
+        //invalid position
+        if(position < 0 || position >= size){
+            //throw error
+            throw new IndexOutOfBoundsException("Invalid index: " + position);
+        }
+
+        //removing the first node
+        if(position == 0){
+            removeFirst();
+        }
+
+        //if position > 0
+        // traverse to the node BEFORE the one we remove
+        Node<E> prev = head;
+        for (int i = 0; i < position - 1; i++) {
+            prev = prev.getNext();
+        }
+
+        // target is the node we want to remove
+        Node<E> target = prev.getNext();
+
+        // save element to return
+        E answer = target.getElement();
+
+        // unlink target: prev -> target.next
+        prev.setNext(target.getNext());
+
+        // decrease size
+        size--;
+
+        return answer;
     }
 
     @Override
