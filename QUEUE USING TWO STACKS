@@ -1,0 +1,10 @@
+enqueue(x):
+    push x onto stack1
+
+dequeue():
+    if stack2 is empty:
+        while stack1 is not empty:
+            push stack1.pop() onto stack2
+    if stack2 is empty:
+        return null
+    return stack2.pop()
