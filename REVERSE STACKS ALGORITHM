@@ -1,0 +1,12 @@
+Algorithm reverseStack(S):
+
+    Create empty stacks A and B
+
+    while S is not empty:
+        A.push(S.pop())
+
+    while A is not empty:
+        B.push(A.pop())
+
+    while B is not empty:
+        S.push(B.pop())
